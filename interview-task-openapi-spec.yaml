@@ -1,0 +1,64 @@
+openapi: 3.0.0
+info:
+  title: Interview Task API
+  description: This is an API to submit inteview task solution
+  contact:
+    email: you@your-company.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+- url: https://hire.q-platform.ru/interview-task
+  description: QP Interview API
+tags:
+- name: tasks
+  description: Applicant calls
+paths:
+  /submission:
+    post:
+      tags:
+      - tasks
+      summary: submit your task solution
+      description: Adds your answer to interview task
+      operationId: addSolution
+      requestBody:
+        description: Solution data to submit
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SolutionItem'
+      responses:
+        "201":
+          description: solution submitted
+        "400":
+          description: invalid input, object invalid
+      x-swagger-router-controller: Tasks
+components:
+  schemas:
+    SolutionItem:
+      required:
+      - answer
+      - email
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          example: John Smith
+        email:
+          type: string
+          format: email
+          example: john.smith@server.com
+        answer:
+          required:
+          - number
+          type: object
+          properties:
+            number:
+              type: integer
+              example: 10
+            textfield:
+              maxLength: 280
+              minLength: 1
+              type: string
